@@ -1,15 +1,12 @@
 import React from "react";
 
-const InputField = ({ value, onInput, ...rest }) => {
+const InputField = ({ value, onChange, ...rest }) => {
   return (
     <div>
       <textarea
-        className="form-control mb-3 p-3"
-        rows="1"
         value={value}
-        onInput={onInput}
+        onChange={onChange}
         {...rest}
-        style={{ maxHeight: "200px", resize: "none" }}
       />
     </div>
   );
