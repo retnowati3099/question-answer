@@ -18,8 +18,9 @@ const Note = () => {
   });
   const [showInputField, setShowInputField] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
-  //const [showDelete, setShowDelete] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  //const [isClicked, setIsClicked] = useState(false);
+  const [showText, setShowText] = useState(false);
   const [dataNote, setDataNote] = useState([]);
 
   // useNavigate hook
@@ -46,9 +47,15 @@ const Note = () => {
     }
   };
 
-  const handleClick = () => {
-    //setShowDelete(true);
-    setIsClicked(true);
+  const handleKeyDownAnswer = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
+
+  const handleClick = (id) => {
+    setShowDelete(true);
+    //setIsClicked(true);
   };
 
   // nge-delete data
@@ -80,6 +87,13 @@ const Note = () => {
         console.log(res);
         //setDataNote(res.data.data);
         setDataNote(res.data);
+        console.log(res.data.length);
+        if (res.data.length === 0) {
+          setShowText(true);
+        } else {
+          setShowText(false);
+        }
+
       })
       .catch((err) => {
         console.log(err);
@@ -95,10 +109,10 @@ const Note = () => {
       .post("http://localhost:8080/notes", qa)
       .then((res) => {
         console.log(res);
-        //alert("Note berhasil disimpen nih bang");
-        //toast.success(res.data.message);
+        setDataNote([...dataNote, res.data]);
+        //setQa({ question: "", note: "" });
         toast.success("Note berhasil disimpen nih bang");
-        navigate("/");
+        //toast.success(res.data.message);
       })
       .catch((err) => console.log(err));
   };
@@ -110,14 +124,6 @@ const Note = () => {
       setShowSubmit(false);
     }
   }, [qa.note]);
-
-  // useEffect(() => {
-  //   if(){
-  //     setShowDelete(true);
-  //   } else{
-  //     setShowDelete(false)
-  //   }
-  // }, [dataNote.id]);
 
   return (
     <div className="container">
@@ -143,6 +149,7 @@ const Note = () => {
                 <InputField
                   placeholder={"Type your answer here ..."}
                   onChange={handleInputAnswer}
+                  onKeyDown={handleKeyDownAnswer}
                   style={{ maxHeight: "200px", resize: "none" }}
                   className="form-control mb-3 p-3"
                   rows="1"
@@ -160,23 +167,14 @@ const Note = () => {
         </div>
         <div className="col-6 offset-1">
           <div className="card border border-0">
+            {showText ? <h2>Let started to write your note</h2> : null}
             {dataNote.map((qn, index) => (
               <div
                 className="card-body border rounded mb-3"
                 key={index}
-                onClick={() => handleClick()}
+                onClick={() => handleClick(qn.id)}
               >
-                {/* {showDelete ? (
-                  <div className="text-end">
-                    <button
-                      type="button"
-                      class="btn-close"
-                      aria-label="Close"
-                      onClick={() => handleDelete(qn.id)}
-                    ></button>
-                  </div>
-                ) : null} */}
-                {isClicked && (
+                {showDelete ? (
                   <div className="text-end">
                     <button
                       type="button"
@@ -185,7 +183,18 @@ const Note = () => {
                       onClick={() => handleDelete(qn.id)}
                     ></button>
                   </div>
-                )}
+                ) : null}
+
+                {/* {isClicked && (
+                  <div className="text-end">
+                    <button
+                      type="button"
+                      className="btn-close"
+                      aria-label="Close"
+                      onClick={() => handleDelete(qn.id)}
+                    ></button>
+                  </div>
+                )} */}
                 <div className="border rounded p-3 my-3">{qn.question}</div>
                 <div className="border rounded p-3 my-3">{qn.note}</div>
               </div>
