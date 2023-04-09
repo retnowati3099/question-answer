@@ -48,15 +48,7 @@ const Note = () => {
 
   const handleClick = () => {
     //setShowDelete(true);
-    setIsClicked(true);
-  };
-
-  // nge-delete data
-  const handleDelete = (id) => {
-    const confirmation = window.confirm("Do you really want to delete?");
-    if (confirmation) {
-      axios
-        .delete(`http://localhost:8080/notes/${id}`)
+        axios.delete(`http://localhost:8080/notes/${id}`)
         .then((res) => {
           console.log(res);
           toast.success("The data is successed to delete!");
