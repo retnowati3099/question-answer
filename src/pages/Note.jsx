@@ -2,7 +2,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InputField from "../components/InputField";
@@ -18,10 +18,9 @@ const Note = () => {
   });
   const [showInputField, setShowInputField] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-  //const [isClicked, setIsClicked] = useState(false);
-  const [showText, setShowText] = useState(false);
+  //const [showDelete, setShowDelete] = useState(false);
   const [dataNote, setDataNote] = useState([]);
+  const [clickedItemId, setClickedItemId] = useState(null);
 
   // useNavigate hook
   const navigate = useNavigate();
@@ -54,9 +53,13 @@ const Note = () => {
   };
 
   const handleClick = (id) => {
-    setShowDelete(true);
-    //setIsClicked(true);
+    setClickedItemId(id);
+    //setShowDelete(true);
   };
+
+  // const handleButtonClick = () => {
+  //   setShowDelete(false);
+  // };
 
   // nge-delete data
   const handleDelete = (id) => {
@@ -84,16 +87,8 @@ const Note = () => {
       //.get("http://192.168.45.36:5000/api/read/notes")
       .get("http://localhost:8080/notes")
       .then((res) => {
-        console.log(res);
         //setDataNote(res.data.data);
         setDataNote(res.data);
-        console.log(res.data.length);
-        if (res.data.length === 0) {
-          setShowText(true);
-        } else {
-          setShowText(false);
-        }
-
       })
       .catch((err) => {
         console.log(err);
@@ -167,38 +162,71 @@ const Note = () => {
         </div>
         <div className="col-6 offset-1">
           <div className="card border border-0">
-            {showText ? <h2>Let started to write your note</h2> : null}
-            {dataNote.map((qn, index) => (
-              <div
-                className="card-body border rounded mb-3"
-                key={index}
-                onClick={() => handleClick(qn.id)}
-              >
-                {showDelete ? (
-                  <div className="text-end">
-                    <button
-                      type="button"
-                      className="btn-close"
-                      aria-label="Close"
-                      onClick={() => handleDelete(qn.id)}
-                    ></button>
-                  </div>
-                ) : null}
+            {/* Jika dataNote kosong, nampil tulisan, jika dataNote tidak kosong, nampil datanya */}
+            {dataNote.length > 0 ? (
+              dataNote.map((qn, index) => (
+                <div
+                  className="card-body border rounded mb-3"
+                  key={index}
+                  onClick={() => handleClick(qn.id)}
+                  //onMouseEnter={() => setShowDelete(true)}
+                  // onMouseLeave={() => setShowDelete(false)}
+                >
+                  {/* {showDelete ? (
+                    <div className="text-end">
+                      <button
+                        type="button"
+                        className="btn-close"
+                        aria-label="Close"
+                        onClick={() => handleDelete()}
+                      ></button>
+                    </div>
+                  ) : null} */}
+                  {clickedItemId === qn.id ? (
+                    <div className="text-end">
+                      <button
+                        type="button"
+                        className="btn-close"
+                        aria-label="Close"
+                        onClick={() => {
+                          handleDelete(qn.id);
+                          //handleButtonClick();
+                        }}
+                      ></button>
+                    </div>
+                  ) : null}
+                  {/* {(showDelete && (clickedItemId === qn.id)) && (
+                    <div className="text-end">
+                      <button
+                        type="button"
+                        className="btn-close"
+                        aria-label="Close"
+                        onClick={() => {
+                          handleDelete(qn.id);
+                        }}
+                      ></button>
+                    </div>
+                  )} */}
 
-                {/* {isClicked && (
+                  {/* {isClicked && (
                   <div className="text-end">
                     <button
                       type="button"
                       className="btn-close"
                       aria-label="Close"
-                      onClick={() => handleDelete(qn.id)}
+                      onClick={() => handleDelete()}
                     ></button>
                   </div>
                 )} */}
-                <div className="border rounded p-3 my-3">{qn.question}</div>
-                <div className="border rounded p-3 my-3">{qn.note}</div>
+                  <div className="border rounded p-3 my-3">{qn.question}</div>
+                  <div className="border rounded p-3 my-3">{qn.note}</div>
+                </div>
+              ))
+            ) : (
+              <div>
+                <h2>Let started to write your note!</h2>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
