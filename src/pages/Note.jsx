@@ -10,28 +10,23 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Note = () => {
   // deklarasi useState Hook
-  // const [question, setQuestion] = useState("");
-  // const [answer, setAnswer] = useState("");
   const [qa, setQa] = useState({
     question: "",
     note: "",
   });
   const [showInputField, setShowInputField] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
-  //const [showDelete, setShowDelete] = useState(false);
   const [dataNote, setDataNote] = useState([]);
   const [clickedItemId, setClickedItemId] = useState(null);
 
-  // useNavigate hook
+  // deklarasi useNavigate hook
   const navigate = useNavigate();
 
   const handleInputQuestion = (e) => {
-    // setQuestion(e.target.value);
     setQa({ ...qa, question: e.target.value });
   };
 
   const handleInputAnswer = (e) => {
-    //setAnswer(e.target.value);
     setQa({ ...qa, note: e.target.value });
   };
 
@@ -57,10 +52,6 @@ const Note = () => {
     //setShowDelete(true);
   };
 
-  // const handleButtonClick = () => {
-  //   setShowDelete(false);
-  // };
-
   // nge-delete data
   const handleDelete = (id) => {
     const confirmation = window.confirm("Do you really want to delete?");
@@ -80,6 +71,10 @@ const Note = () => {
     }
   };
 
+  // const handleEdit = () {
+
+  // }
+
   // nge-get data dari sever
   useEffect(() => {
     document.title = "Question & Answer";
@@ -97,7 +92,6 @@ const Note = () => {
 
   // nge-post data
   const handleSubmit = (e) => {
-    //alert(`Question: ${qa.question} \n Answer: ${qa.answer}`);
     e.preventDefault();
     axios
       //.post("http://192.168.45.36:5000/api/create/note", qa)
@@ -105,13 +99,16 @@ const Note = () => {
       .then((res) => {
         console.log(res);
         setDataNote([...dataNote, res.data]);
-        //setQa({ question: "", note: "" });
         toast.success("Note berhasil disimpen nih bang");
         //toast.success(res.data.message);
+        setQa({ ...qa, question: "" });
+        setShowInputField(false);
+        setShowSubmit(false);
       })
       .catch((err) => console.log(err));
   };
 
+  // handle submit button
   useEffect(() => {
     if (qa.note) {
       setShowSubmit(true);
@@ -138,6 +135,7 @@ const Note = () => {
                 }}
                 className="form-control mb-3 p-3"
                 rows="1"
+                value={qa.question}
               />
 
               {showInputField ? (
@@ -169,8 +167,6 @@ const Note = () => {
                   className="card-body border rounded mb-3"
                   key={index}
                   onClick={() => handleClick(qn.id)}
-                  //onMouseEnter={() => setShowDelete(true)}
-                  // onMouseLeave={() => setShowDelete(false)}
                 >
                   {/* {showDelete ? (
                     <div className="text-end">
@@ -184,6 +180,9 @@ const Note = () => {
                   ) : null} */}
                   {clickedItemId === qn.id ? (
                     <div className="text-end">
+                      <button className="border-0 bg-transparent mx-2" onclick={handleEdit(qn.id)}>
+                        <i className="bi bi-pencil-square"></i>
+                      </button>
                       <button
                         type="button"
                         className="btn-close"

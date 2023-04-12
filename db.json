@@ -4,6 +4,56 @@
       "question": "Siapa tuhanmu?",
       "note": "Allah",
       "id": 1
+    },
+    {
+      "question": "Apa warna pelangi?",
+      "note": "Mejikuhibiniu",
+      "id": 2
+    },
+    {
+      "question": "Berapa jumlah hari dalam seminggu?",
+      "note": "7 hari",
+      "id": 3
+    },
+    {
+      "question": "Hari ini hari apa?",
+      "note": "Hari Selasa",
+      "id": 4
+    },
+    {
+      "question": "Are you happy today?",
+      "note": "Yes, i am happy",
+      "id": 5
+    },
+    {
+      "question": "Are you sad?",
+      "note": "Yes, I am",
+      "id": 6
+    },
+    {
+      "question": "Do you love me?",
+      "note": "Yes, i do",
+      "id": 7
+    },
+    {
+      "question": "What are you doing today?",
+      "note": "I am studying ",
+      "id": 8
+    },
+    {
+      "question": "What is your name?",
+      "note": "I am Rew",
+      "id": 9
+    },
+    {
+      "question": "How old are you?",
+      "note": "I am 24 years old",
+      "id": 10
+    },
+    {
+      "question": "Who are you?",
+      "note": "I am a programmer",
+      "id": 11
     }
   ]
 }
