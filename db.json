@@ -1,13 +1,13 @@
 {
   "notes": [
     {
-      "question": "Siapa tuhanmu?",
-      "note": "Allah",
+      "question": "Siapa Nabi mu?",
+      "note": "Muhammad SAW",
       "id": 1
     },
     {
       "question": "Apa warna pelangi?",
-      "note": "Mejikuhibiniu",
+      "note": "Mejikuhibiniu (merah, jingga, kuning, hijau, biru, nila, dan ungu)",
       "id": 2
     },
     {
@@ -16,18 +16,13 @@
       "id": 3
     },
     {
-      "question": "Hari ini hari apa?",
-      "note": "Hari Selasa",
-      "id": 4
-    },
-    {
       "question": "Are you happy today?",
       "note": "Yes, i am happy",
       "id": 5
     },
     {
       "question": "Are you sad?",
-      "note": "Yes, I am",
+      "note": "No, I am not",
       "id": 6
     },
     {
@@ -54,6 +49,21 @@
       "question": "Who are you?",
       "note": "I am a programmer",
       "id": 11
+    },
+    {
+      "question": "Are you a programmer?",
+      "note": "Yes, i am a programmer",
+      "id": 12
+    },
+    {
+      "question": "Are you a student?",
+      "note": "No",
+      "id": 13
+    },
+    {
+      "question": "Sebutkan makanan khas daerah Jakarta!",
+      "note": "Kerak telor, gado - gad, nasi uduk",
+      "id": 14
     }
   ]
 }

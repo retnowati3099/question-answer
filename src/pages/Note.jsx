@@ -2,11 +2,12 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InputField from "../components/InputField";
 import "bootstrap-icons/font/bootstrap-icons.css";
+// import ReactModal from "react-modal";
 
 const Note = () => {
   // deklarasi useState Hook
@@ -18,6 +19,11 @@ const Note = () => {
   const [showSubmit, setShowSubmit] = useState(false);
   const [dataNote, setDataNote] = useState([]);
   const [clickedItemId, setClickedItemId] = useState(null);
+  // const [update, setUpdate] = useState({
+  //   question: "",
+  //   note: "",
+  // });
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   // deklarasi useNavigate hook
   const navigate = useNavigate();
@@ -57,11 +63,12 @@ const Note = () => {
     const confirmation = window.confirm("Do you really want to delete?");
     if (confirmation) {
       axios
-        .delete(`http://localhost:8080/notes/${id}`)
+        // .delete(`http://localhost:8080/notes/${id}`)
+        .delete(`http://192.168.43.81:5000/api/noteApp/delete/note/${id}`)
         .then((res) => {
           console.log(res);
           toast.success("The data is successed to delete!");
-          setDataNote(dataNote.filter((item) => item.id !== id));
+          setDataNote(dataNote.filter((item) => item.idNote !== id));
           navigate("/");
         })
         .catch((err) => {
@@ -71,19 +78,16 @@ const Note = () => {
     }
   };
 
-  // const handleEdit = () {
-
-  // }
-
   // nge-get data dari sever
   useEffect(() => {
     document.title = "Question & Answer";
     axios
-      //.get("http://192.168.45.36:5000/api/read/notes")
-      .get("http://localhost:8080/notes")
+      .get("http://192.168.43.81:5000/api/noteApp/read/notes")
+      // .get("http://localhost:8080/notes")
       .then((res) => {
-        //setDataNote(res.data.data);
-        setDataNote(res.data);
+        console.log(res);
+        setDataNote(res.data.data);
+        // setDataNote(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -94,11 +98,12 @@ const Note = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      //.post("http://192.168.45.36:5000/api/create/note", qa)
-      .post("http://localhost:8080/notes", qa)
+      .post("http://192.168.43.81:5000/api/noteApp/create/note", qa)
+      // post("http://localhost:8080/notes", qa)
       .then((res) => {
         console.log(res);
-        setDataNote([...dataNote, res.data]);
+        // setDataNote([...dataNote, res.data]);
+        setDataNote([...dataNote, res.data.data]);
         toast.success("Note berhasil disimpen nih bang");
         //toast.success(res.data.message);
         setQa({ ...qa, question: "" });
@@ -116,6 +121,39 @@ const Note = () => {
       setShowSubmit(false);
     }
   }, [qa.note]);
+
+  // handle edit
+  // const handleUpdate = (id) => {
+  //   useEffect(() => {
+  //     axios
+  //       .get(`http://localhost:8080/notes/${id}`)
+  //       .then((res) => {
+  //         console.log(res);
+  //         setUpdate(res.data);
+  //         setIsModalOpen(true);
+  //       })
+  //       .catch((err) => {
+  //         console.error(err);
+  //       });
+  //   }, [id]);
+  // };
+
+  // const handleUpdate = (id) => {
+  //   axios
+  //     .put(`http://localhost:8080/notes/${id}`, update)
+  //     .than((res) => {
+  //       console.log(res);
+  //       toast.success("Data is successed to be update!");
+  //       navigate("/");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  // const handleCloseModal = () => {
+  //   setIsModalOpen(false);
+  // };
 
   return (
     <div className="container">
@@ -166,57 +204,28 @@ const Note = () => {
                 <div
                   className="card-body border rounded mb-3"
                   key={index}
-                  onClick={() => handleClick(qn.id)}
+                  onClick={() => handleClick(qn.idNote)}
                 >
-                  {/* {showDelete ? (
+                  {clickedItemId === qn.idNote ? (
                     <div className="text-end">
-                      <button
-                        type="button"
-                        className="btn-close"
-                        aria-label="Close"
-                        onClick={() => handleDelete()}
-                      ></button>
-                    </div>
-                  ) : null} */}
-                  {clickedItemId === qn.id ? (
-                    <div className="text-end">
-                      <button className="border-0 bg-transparent mx-2" onclick={handleEdit(qn.id)}>
+                      <Link
+                        className="btn mx-2"
+                        // onclick={handleUpdate(qn.id)}
+                        to={`/update/${qn.idNote}`}
+                      >
                         <i className="bi bi-pencil-square"></i>
-                      </button>
+                      </Link>
                       <button
                         type="button"
                         className="btn-close"
                         aria-label="Close"
                         onClick={() => {
-                          handleDelete(qn.id);
+                          handleDelete(qn.idNote);
                           //handleButtonClick();
                         }}
                       ></button>
                     </div>
                   ) : null}
-                  {/* {(showDelete && (clickedItemId === qn.id)) && (
-                    <div className="text-end">
-                      <button
-                        type="button"
-                        className="btn-close"
-                        aria-label="Close"
-                        onClick={() => {
-                          handleDelete(qn.id);
-                        }}
-                      ></button>
-                    </div>
-                  )} */}
-
-                  {/* {isClicked && (
-                  <div className="text-end">
-                    <button
-                      type="button"
-                      className="btn-close"
-                      aria-label="Close"
-                      onClick={() => handleDelete()}
-                    ></button>
-                  </div>
-                )} */}
                   <div className="border rounded p-3 my-3">{qn.question}</div>
                   <div className="border rounded p-3 my-3">{qn.note}</div>
                 </div>
