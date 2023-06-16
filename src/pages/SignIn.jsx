@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const SignIn = () => {
   const [signIn, setSignIn] = useState({
@@ -7,13 +9,22 @@ const SignIn = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("endpoint", signIn);
+      const response = await axios.post(
+        "http://192.168.43.81:5000/api/users/login",
+        signIn
+      );
       console.log(response);
+      toast.success("Sign in is success!");
+      localStorage.setItem("token", response.data.token);
+      navigate("/note");
     } catch (error) {
       console.error(error);
+      toast.error("Sign in is failed!");
     }
   };
   return (
@@ -21,6 +32,7 @@ const SignIn = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-4 mx-auto">
+            <ToastContainer />
             <div className="card">
               <form onSubmit={handleSubmit}>
                 <div className="card-header">
